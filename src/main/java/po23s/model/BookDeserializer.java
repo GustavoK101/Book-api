@@ -11,7 +11,9 @@ public class BookDeserializer implements JsonDeserializer<Book>{
         JsonObject jo = je.getAsJsonObject();
         JsonObject volumeInfo = jo.getAsJsonObject("volumeInfo");
         String title = volumeInfo.get("title").getAsString();
-        return new Book(title);    
+        System.out.println(volumeInfo);
+        String imgUrl = volumeInfo.getAsJsonObject("imageLinks").get("smallThumbnail").getAsString();
+        return new Book(title,imgUrl);    
     }
         
 }
