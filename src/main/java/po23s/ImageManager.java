@@ -1,0 +1,164 @@
+package po23s;
+
+import po23s.http.Callback;
+import po23s.http.ClienteHttp;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+
+public class ImageManager {
+    private final Map<String, Image> inMemoryCache = new HashMap<>();
+    private Image defaultImage;
+
+    private static final ImageManager instance = new ImageManager();
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
+
+
+    private ImageManager() {
+        try {
+            defaultImage = ImageIO.read(ImageManager.class.getResource("/image.png")).getScaledInstance(120, 80, Image.SCALE_SMOOTH);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public boolean isImageCached(String url) {
+        return inMemoryCache.containsKey(url) || getImageFromFileCache(url) != null;
+    }
+
+    public static ImageManager getInstance() {
+        return instance;
+    }
+
+    public Image getImage(String url) {
+        if (url == null || url.isEmpty()) {
+            return defaultImage;
+        }
+
+        if (inMemoryCache.containsKey(url)) { // check in memory cache
+            return inMemoryCache.get(url);
+        }
+
+        Image image = getImageFromFileCache(url);// check file cache
+        if (image != null) {
+            inMemoryCache.put(url, image);
+            return image;
+        }
+
+        ClienteHttp http = new ClienteHttp();
+        byte[] raw = http.getRaw(url);
+        inMemoryCache.put(url, Toolkit.getDefaultToolkit().createImage(raw));
+        saveImageToCache(url, raw);
+        return inMemoryCache.get(url);
+    }
+
+    private static String getUrlSha1(String url) {
+        try {
+            if (url == null || url.isEmpty()) {
+                return "null";
+            }
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(url.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getCacheDir() {
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        String cacheDir = tmpDir + FileSystems.getDefault().getSeparator() + "books-api-cache";
+        File dir = new File(cacheDir);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return cacheDir;
+    }
+
+    public Image getImageFromFileCache(String url) {
+        String sha1 = getUrlSha1(url);
+        String cacheFile = getCacheDir() + "/" + sha1;
+
+        // check if file exists
+        if (Files.exists(Paths.get(cacheFile))) {
+            try {
+                return ImageIO.read(new File(cacheFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public void saveImageToCache(String url, byte[] raw) {
+        String sha1 = getUrlSha1(url);
+        String cacheFile = getCacheDir() + "/" + sha1;
+        try {
+            Files.write(Paths.get(cacheFile), raw);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public SwingWorker<Image, Void> getImageAsync(String url, Callback<Image> callback) {
+        executor.submit(() -> {
+            try {
+                callback.onDone(getImage(url), null);
+            } catch (Exception e) {
+                callback.onDone(null, e);
+            }
+        });
+        return null;
+
+//        return new SwingWorker<>() {
+//            @Override
+//            protected Image doInBackground() throws InterruptedException {
+//                if (url == null || url.isEmpty()) {
+//                    return defaultImage;
+//                }
+//                return getImage(url);
+//            }
+//
+//            @Override
+//            protected void done() {
+//                try {
+//                    callback.onDone(get(), null);
+//                } catch (Exception e) {
+//                    callback.onDone(null, e);
+//                }
+//            }
+//        };
+    }
+
+    public Image getDefaultImage() {
+        return defaultImage;
+    }
+
+    public static void main(String[] args) {
+        ImageManager imageManager = ImageManager.getInstance();
+        Image image = imageManager.getImage("http://books.google.com/books/content?id=x9gtDAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api");
+        System.out.println(image);
+    }
+}

@@ -10,6 +10,9 @@ public class BookTableModel extends AbstractTableModel {
     private List <Book> listaLivros = new ArrayList<>();
 
     public void setListaLivros(List<Book> listaLivros) {
+        if (listaLivros == null) {
+            listaLivros = new ArrayList<>();
+        }
         this.listaLivros = listaLivros;
     }
 
