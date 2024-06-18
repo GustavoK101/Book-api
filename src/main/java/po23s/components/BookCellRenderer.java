@@ -6,10 +6,9 @@ import po23s.model.Book;
 import javax.swing.*;
 import java.awt.*;
 
-public class BookCellRenderer implements ListCellRenderer<Book> {
+public class BookCellRenderer {
 
-    @Override
-    public Component getListCellRendererComponent(JList<? extends Book> list, Book book, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getComponent(Component parent, Book book, int index, boolean isSelected, boolean cellHasFocus) {
         JPanel panel = new JPanel(new MigLayout("debug", "[]"));
         panel.setMaximumSize(new Dimension(80, 120));
         panel.setBackground(Color.WHITE);

@@ -2,37 +2,35 @@ package po23s.view;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import net.miginfocom.swing.MigLayout;
-import po23s.components.BookCellRenderer;
-import po23s.components.CustomListModel;
+import po23s.components.BookGrid;
 import po23s.components.ImageButton;
 import po23s.http.BookApi;
 import po23s.model.Book;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("DataFlowIssue")
 public class TelaPesquisa extends JFrame {
-    CustomListModel<Book> listModel = new CustomListModel<>();
     JTextField campoBusca;
     BookApi api;
 
+    private List<Book> books = new ArrayList<>();
+
     public TelaPesquisa() {
-        initComponents();
         setTitle("Pesquisa de Livros");
         for (int i = 0; i < 50; i++) {
-            listModel.addElement(new Book("Java " + i, "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"));
+            books.add(new Book("Java " + i, "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"));
         }
+        initComponents();
         campoBusca.requestFocus();
         campoBusca.addActionListener(e -> {
             realizarBusca();
         });
 
         api = new BookApi();
-        System.out.println(Thread.currentThread().getName());
 
     }
 
@@ -46,8 +44,8 @@ public class TelaPesquisa extends JFrame {
                 exception.printStackTrace();
                 return;
             }
-            listModel.clear();
-            result.getItems().forEach(listModel::addElement);
+//            listModel.clear();
+//            result.getItems().forEach(listModel::addElement);
         });
     }
 
@@ -70,18 +68,19 @@ public class TelaPesquisa extends JFrame {
         botaoBusca.setMargin(new Insets(4, 4, 4, 16));
         panel.add(campoBusca, "span 10, pushx, growx");
         panel.add(botaoBusca, "growx, wrap");
-        JList<Book> list = new JList<>(listModel);
-        list.setVisibleRowCount(-1);
+//        JList<Book> list = new JList<>(listModel);
+//        list.setVisibleRowCount(-1);
 
-        list.setCellRenderer(new BookCellRenderer());
-        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-
-
-        JScrollPane listScroller = new JScrollPane(list);
-        listScroller.setAlignmentX(LEFT_ALIGNMENT);
+//        list.setCellRenderer(new BookCellRenderer());
+//        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 
 
-        panel.add(listScroller, "span 12, grow, wrap");
+//        JScrollPane listScroller = new JScrollPane(list);
+//        listScroller.setAlignmentX(LEFT_ALIGNMENT);
+
+        BookGrid bookGrid = new BookGrid(4, books);
+        panel.add(bookGrid, "span 12, grow, wrap");
+        panel.add(new JLabel("Resultado da busca"), "span 12, wrap");
 
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

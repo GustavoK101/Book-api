@@ -10,11 +10,16 @@ public class BookDeserializer implements JsonDeserializer<Book> {
     public Book deserialize(JsonElement je, Type type, JsonDeserializationContext jdc) throws JsonParseException {
         JsonObject jo = je.getAsJsonObject();
         JsonObject volumeInfo = jo.getAsJsonObject("volumeInfo");
-        String title = volumeInfo.get("title").getAsString();
+        String title;
+        if (volumeInfo.has("title")) {
+            title = volumeInfo.get("title").getAsString();
+        } else {
+            title = "Sem título";
+        }
         JsonObject imageLinks = volumeInfo.getAsJsonObject("imageLinks");
         String imgUrl;
         if (imageLinks != null) {
-            imgUrl = imageLinks.get("smallThumbnail").getAsString();
+            imgUrl = imageLinks.get("thumbnail").getAsString();
         } else {
             imgUrl = null;
         }

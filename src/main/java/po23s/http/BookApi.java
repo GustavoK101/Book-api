@@ -17,7 +17,7 @@ public class BookApi {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Book.class, new BookDeserializer());
         gson = builder.create();
-        clienteHttp = new ClienteHttp();
+        clienteHttp = new MockClienteHttp();
     }
 
 
@@ -26,7 +26,7 @@ public class BookApi {
         SwingWorker<SearchResult, Void> worker = new SwingWorker<>() {
             @Override
             protected SearchResult doInBackground() {
-                String retornoJSON = clienteHttp.buscaDados("https://www.googleapis.com/books/v1/volumes?q=" + pesquisa.replace(" ", "+"));
+                String retornoJSON = clienteHttp.buscaDados("https://www.googleapis.com/books/v1/volumes?maxResults=20&q=" + pesquisa.replace(" ", "+"));
                 return gson.fromJson(retornoJSON, SearchResult.class);
             }
 

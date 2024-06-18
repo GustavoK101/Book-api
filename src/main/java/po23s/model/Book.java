@@ -1,8 +1,12 @@
 package po23s.model;
 
+import java.beans.Transient;
+
 public class Book {
     private String title;
     private String imgUrl;
+
+    private transient boolean isSelected = false;
 //    private String autores;
 //    private String editora;
 //    private Boolean dispPdf;
@@ -21,7 +25,7 @@ public class Book {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-        
+
     public String getTitle() {
         return title;
     }
@@ -30,7 +34,11 @@ public class Book {
         this.title = title;
     }
 
-    
-        
-    
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }
