@@ -29,9 +29,6 @@ public class BookItemPanel extends JPanel {
         this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(), border));
 
 
-        // add padding
-//        setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-        // set preferred size
         setPreferredSize(new Dimension(150, 250));
 
         title = new JLabel(book.getTitle());

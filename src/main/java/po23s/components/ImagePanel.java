@@ -15,7 +15,7 @@ public class ImagePanel extends JLabel implements Callback<Image> {
     public ImagePanel(String url, int preferredWidth) {
         super();
         this.url = url;
-        setMaximumSize(new Dimension(150, 150));
+        setMaximumSize(new Dimension(150, 200));
         loadImage();
 
     }
