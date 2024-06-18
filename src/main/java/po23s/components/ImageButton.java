@@ -3,11 +3,9 @@ package po23s.components;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 
 public class ImageButton extends JButton {
-    private final String loadingIconName = "loading.gif";
     private final ImageIcon loadingImage;
     private final ImageIcon defaultImage;
 
@@ -18,7 +16,7 @@ public class ImageButton extends JButton {
             Image img = ImageIO.read(getClass().getResource("/" + iconName + ".png"));
             Image scaledInstance = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             defaultImage = new ImageIcon(scaledInstance);
-            URL loadingIcon = getClass().getResource("/" + loadingIconName);
+            URL loadingIcon = getClass().getResource("/loading.gif");
             loadingImage = new ImageIcon(loadingIcon);
             setIcon(defaultImage);
 
