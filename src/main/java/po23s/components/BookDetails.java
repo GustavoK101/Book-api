@@ -31,7 +31,7 @@ public class BookDetails extends JDialog {
         // add image
         imagePanel = new ImagePanel("", 200, 200);
         imagePanel.setVisible(false);
-        add(imagePanel, "wrap");
+        add(imagePanel, "center,wrap");
         title = new JLabel("<html><body>Clique em um livro para ver detalhes</body></html>");
         title.setFont(new Font("Arial", Font.BOLD, 24));
         add(title, "wrap");
