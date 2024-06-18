@@ -4,7 +4,6 @@ import po23s.http.Callback;
 import po23s.http.ClienteHttp;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -15,10 +14,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class ImageManager {
     private final Map<String, Image> inMemoryCache = new HashMap<>();
@@ -36,10 +33,6 @@ public class ImageManager {
         }
 
 
-    }
-
-    public boolean isImageCached(String url) {
-        return inMemoryCache.containsKey(url) || getImageFromFileCache(url) != null;
     }
 
     public static ImageManager getInstance() {
@@ -122,7 +115,7 @@ public class ImageManager {
         }
     }
 
-    public SwingWorker<Image, Void> getImageAsync(String url, Callback<Image> callback) {
+    public void getImageAsync(String url, Callback<Image> callback) {
         executor.submit(() -> {
             try {
                 callback.onDone(getImage(url), null);
@@ -130,7 +123,6 @@ public class ImageManager {
                 callback.onDone(null, e);
             }
         });
-        return null;
 
 //        return new SwingWorker<>() {
 //            @Override

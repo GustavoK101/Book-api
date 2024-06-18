@@ -8,40 +8,28 @@ import java.awt.*;
 
 
 public class ImagePanel extends JLabel implements Callback<Image> {
-    private String url;
+    private final String url;
 
-    SwingWorker<Image, Void> worker;
+    private static final ImageIcon LOADING_ICON = new ImageIcon(ImagePanel.class.getResource("/loading.gif"));
 
-
-    public ImagePanel(String url, int preferredW, int preferredH) {
+    public ImagePanel(String url, int preferredWidth) {
         super();
-        // init with default image
+        this.url = url;
+        setMaximumSize(new Dimension(150, 150));
+        loadImage();
 
-        if (ImageManager.getInstance().isImageCached(url)) {
-            Image image = ImageManager.getInstance().getImage(url);
-            int w = image.getWidth(null);
-            int h = image.getHeight(null);
+    }
 
-            float ratio = (float) w / h;
-            int newW = (int) (preferredH * ratio);
-            image = image.getScaledInstance(newW, preferredH, Image.SCALE_SMOOTH);
-            setIcon(new ImageIcon(image));
-            return;
-        }
-        Image defaultImage = ImageManager.getInstance().getDefaultImage();
-        setIcon(new ImageIcon(defaultImage));
-
-        worker = ImageManager.getInstance().getImageAsync(url, this);
-        if (worker != null) {
-            worker.execute();
-        }
-
+    public void loadImage() {
+        setIcon(LOADING_ICON);
+        ImageManager.getInstance().getImageAsync(url, this);
     }
 
     @Override
     public void onDone(Image result, Exception erro) {
         if (erro != null) {
             erro.printStackTrace();
+            setIcon(new ImageIcon(ImageManager.getInstance().getDefaultImage()));
             return;
         }
         System.out.println("Image loaded");
@@ -53,7 +41,10 @@ public class ImagePanel extends JLabel implements Callback<Image> {
         } else {
             image = result;
         }
-        image = image.getScaledInstance(150, 100, Image.SCALE_SMOOTH);
+        // scale image to fit a 150x150 box, keeping the aspect ratio
+        image = image.getScaledInstance(150, -1, Image.SCALE_SMOOTH);
+
+
         setIcon(new ImageIcon(image));
         revalidate();
         repaint();

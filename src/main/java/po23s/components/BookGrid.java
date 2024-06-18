@@ -10,7 +10,6 @@ import java.util.List;
 
 public class BookGrid extends JPanel {
 
-    BookCellRenderer cellRenderer = new BookCellRenderer();
     JPanel panel = new JPanel();
     JScrollPane scrollPane = new JScrollPane(panel);
     private List<Book> books;
@@ -26,12 +25,7 @@ public class BookGrid extends JPanel {
         this.gridWidth = gridWidth;
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-        add(scrollPane, "growx, wrap");
-        JPanel redPanel = new JPanel();
-        redPanel.setBackground(new java.awt.Color(255, 0, 0));
-        redPanel.setPreferredSize(new Dimension(150, 80));
-        add(redPanel, "span 2, growx");
-
+        add(scrollPane, "grow, wrap, push");
 
         panel.setLayout(new MigLayout("fillx,  insets 8, gap 8", "[]".repeat(gridWidth)));
         updateGrid();
@@ -53,7 +47,6 @@ public class BookGrid extends JPanel {
             System.out.println("Adding book " + i + " to grid");
             Component component = createBookItem(books.get(i));
             panel.add(component, constraints);
-
         }
         panel.revalidate();
         panel.repaint();
@@ -94,5 +87,23 @@ public class BookGrid extends JPanel {
 
 
         return component;
+    }
+
+    public void clear() {
+        this.books.clear();
+        panel.removeAll();
+
+    }
+
+
+    public void addBooks(List<Book> items) {
+        this.books.addAll(items);
+        updateGrid();
+    }
+
+    public void setGridWidth(int gridWidth) {
+        this.gridWidth = gridWidth;
+        panel.removeAll();
+        updateGrid();
     }
 }

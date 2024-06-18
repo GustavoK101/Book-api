@@ -4,7 +4,7 @@ import net.miginfocom.swing.MigLayout;
 import po23s.model.Book;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,16 +30,18 @@ public class BookItemPanel extends JPanel {
 
 
         // add padding
-        setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+//        setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         // set preferred size
-        setPreferredSize(new Dimension(150, 150));
+        setPreferredSize(new Dimension(150, 250));
 
         title = new JLabel(book.getTitle());
         title.setMaximumSize(new Dimension(150, 20));
 
-        ImagePanel imagePanel = new ImagePanel(book.getImgUrl(), 150, 40);
+        ImagePanel imagePanel = new ImagePanel(book.getImgUrl(), 100);
+
+
+        add(imagePanel, "span 2, wrap, pushy, center");
         add(title, "wrap");
-        add(imagePanel, "wrap");
 
         this.addMouseListener(new MouseAdapter() {
             @Override
