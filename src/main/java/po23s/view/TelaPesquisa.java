@@ -2,6 +2,7 @@ package po23s.view;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import net.miginfocom.swing.MigLayout;
+import po23s.components.BookDetails;
 import po23s.components.BookGrid;
 import po23s.components.ImageButton;
 import po23s.http.BookApi;
@@ -128,6 +129,17 @@ public class TelaPesquisa extends JFrame {
         setLocationRelativeTo(null);
 
         setVisible(true);
+
+        BookDetails detalhes = new BookDetails(this, "Detalhes do Livro");
+        detalhes.setVisible(true);
+        detalhes.setSize(350, getHeight());
+
+        bookGrid.addOnBookClickedListener(book -> {
+            detalhes.setBook(book);
+            if (!detalhes.isVisible()) {
+                detalhes.setVisible(true);
+            }
+        });
 
     }
 

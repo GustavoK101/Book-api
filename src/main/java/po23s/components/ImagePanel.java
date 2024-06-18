@@ -8,20 +8,31 @@ import java.awt.*;
 
 
 public class ImagePanel extends JLabel implements Callback<Image> {
-    private final String url;
+    private String url;
 
     private static final ImageIcon LOADING_ICON = new ImageIcon(ImagePanel.class.getResource("/loading.gif"));
+    private int maxWidth = 150;
+    private int maxHeight = 200;
 
-    public ImagePanel(String url, int preferredWidth) {
+    public ImagePanel(String url) {
         super();
         this.url = url;
         setMaximumSize(new Dimension(150, 200));
         loadImage();
+    }
 
+    public ImagePanel(String url, int maxWidth, int maxHeight) {
+        this.url = url;
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
     }
 
     public void loadImage() {
         setIcon(LOADING_ICON);
+        if (url == null || url.isEmpty()) {
+            setIcon(new ImageIcon(ImageManager.getInstance().getDefaultImage()));
+            return;
+        }
         ImageManager.getInstance().getImageAsync(url, this);
     }
 
@@ -41,12 +52,16 @@ public class ImagePanel extends JLabel implements Callback<Image> {
         } else {
             image = result;
         }
-        // scale image to fit a 150x150 box, keeping the aspect ratio
-        image = image.getScaledInstance(150, -1, Image.SCALE_SMOOTH);
+        image = image.getScaledInstance(maxWidth, -1, Image.SCALE_SMOOTH);
 
 
         setIcon(new ImageIcon(image));
         revalidate();
         repaint();
+    }
+
+    public void setUrl(String imgUrl) {
+        this.url = imgUrl;
+        loadImage();
     }
 }

@@ -34,7 +34,7 @@ public class BookItemPanel extends JPanel {
         title = new JLabel(book.getTitle());
         title.setMaximumSize(new Dimension(150, 20));
 
-        ImagePanel imagePanel = new ImagePanel(book.getImgUrl(), 100);
+        ImagePanel imagePanel = new ImagePanel(book.getImgUrl());
 
 
         add(imagePanel, "span 2, wrap, pushy, center");
