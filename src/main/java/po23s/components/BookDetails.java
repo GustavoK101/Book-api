@@ -7,19 +7,22 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BookDetails extends JDialog {
-
     private Book book;
-
-
     ImagePanel imagePanel;
     JLabel title;
 
     public BookDetails(Frame owner, String title) {
         super(owner, title, false);
         initComponent();
+        setVisible(true);
+    }
 
-        // to the right of owner
-        setLocation(owner.getX() + owner.getWidth() + 4, owner.getY());
+    @Override
+    public void setVisible(boolean b) {
+        setSize(350, getOwner().getHeight());
+        setLocation(getOwner().getX() + getOwner().getWidth() + 4, getOwner().getY());
+        super.setVisible(b);
+
     }
 
     private void initComponent() {
@@ -31,14 +34,10 @@ public class BookDetails extends JDialog {
         add(imagePanel, "wrap");
         title = new JLabel("<html><body>Clique em um livro para ver detalhes</body></html>");
         title.setFont(new Font("Arial", Font.BOLD, 24));
-        // wrap text if necessary
         add(title, "wrap");
-
         JLabel author = new JLabel("Autor do livro");
-        // set a greyish color
         author.setForeground(new Color(0x666666));
         add(author, "wrap");
-
     }
 
     public void setBook(Book book) {

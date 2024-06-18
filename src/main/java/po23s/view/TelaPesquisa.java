@@ -26,6 +26,8 @@ public class TelaPesquisa extends JFrame {
 
     private List<Book> books = new ArrayList<>();
     BookGrid bookGrid;
+    BookDetails dialogDetalhes;
+
     ImageButton botaoBusca;
 
 
@@ -76,8 +78,6 @@ public class TelaPesquisa extends JFrame {
             }
             bookGrid.clear();
             bookGrid.addBooks(result.getItems());
-//            listModel.clear();
-//            result.getItems().forEach(listModel::addElement);
         });
     }
 
@@ -130,14 +130,12 @@ public class TelaPesquisa extends JFrame {
 
         setVisible(true);
 
-        BookDetails detalhes = new BookDetails(this, "Detalhes do Livro");
-        detalhes.setVisible(true);
-        detalhes.setSize(350, getHeight());
+        dialogDetalhes = new BookDetails(this, "Detalhes do Livro");
 
         bookGrid.addOnBookClickedListener(book -> {
-            detalhes.setBook(book);
-            if (!detalhes.isVisible()) {
-                detalhes.setVisible(true);
+            dialogDetalhes.setBook(book);
+            if (!dialogDetalhes.isVisible()) {
+                dialogDetalhes.setVisible(true);
             }
         });
 

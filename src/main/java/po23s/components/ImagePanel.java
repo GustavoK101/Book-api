@@ -5,19 +5,20 @@ import po23s.http.Callback;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 
 public class ImagePanel extends JLabel implements Callback<Image> {
     private String url;
 
-    private static final ImageIcon LOADING_ICON = new ImageIcon(ImagePanel.class.getResource("/loading.gif"));
+    private static final ImageIcon LOADING_ICON = new ImageIcon(Objects.requireNonNull(ImagePanel.class.getResource("/loading.gif")));
     private int maxWidth = 150;
     private int maxHeight = 200;
 
     public ImagePanel(String url) {
         super();
         this.url = url;
-        setMaximumSize(new Dimension(150, 200));
+        setMaximumSize(new Dimension(maxWidth, maxHeight));
         loadImage();
     }
 
@@ -61,6 +62,7 @@ public class ImagePanel extends JLabel implements Callback<Image> {
     }
 
     public void setUrl(String imgUrl) {
+        if (this.url != null && this.url.equals(imgUrl)) return;
         this.url = imgUrl;
         loadImage();
     }

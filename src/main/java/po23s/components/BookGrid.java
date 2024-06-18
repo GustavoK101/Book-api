@@ -78,7 +78,7 @@ public class BookGrid extends JPanel {
                 }
                 // if current book is clicked book, toggle selection
                 else if (bookItemPanel.getBook() == clickedBook) {
-                    bookItemPanel.getBook().setSelected(!bookItemPanel.getBook().isSelected());
+                    bookItemPanel.getBook().setSelected(true);
                     bookItemPanel.refresh();
                 }
             }
