@@ -69,6 +69,7 @@ public class TelaPesquisa extends JFrame {
             this.campoBusca.setEnabled(true);
             this.botaoBusca.setLoading(false);
             if (exception != null) {
+                JOptionPane.showMessageDialog(this, "Erro ao buscar livros:\n" + exception.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 exception.printStackTrace();
                 return;
             }

@@ -12,13 +12,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ImageManager {
-    private final Map<String, Image> inMemoryCache = new HashMap<>();
     private Image defaultImage;
 
     private static final ImageManager instance = new ImageManager();
@@ -44,22 +41,18 @@ public class ImageManager {
             return defaultImage;
         }
 
-        if (inMemoryCache.containsKey(url)) { // check in memory cache
-            return inMemoryCache.get(url);
-        }
 
         Image image = getImageFromFileCache(url);// check file cache
         if (image != null) {
-            inMemoryCache.put(url, image);
             return image;
         }
 
         ClienteHttp http = new ClienteHttp();
         byte[] raw = http.getRaw(url);
-        inMemoryCache.put(url, Toolkit.getDefaultToolkit().createImage(raw));
         saveImageToCache(url, raw);
-        return inMemoryCache.get(url);
+        return Toolkit.getDefaultToolkit().createImage(raw);
     }
+
 
     private static String getUrlSha1(String url) {
         try {
@@ -123,34 +116,11 @@ public class ImageManager {
                 callback.onDone(null, e);
             }
         });
-
-//        return new SwingWorker<>() {
-//            @Override
-//            protected Image doInBackground() throws InterruptedException {
-//                if (url == null || url.isEmpty()) {
-//                    return defaultImage;
-//                }
-//                return getImage(url);
-//            }
-//
-//            @Override
-//            protected void done() {
-//                try {
-//                    callback.onDone(get(), null);
-//                } catch (Exception e) {
-//                    callback.onDone(null, e);
-//                }
-//            }
-//        };
     }
 
     public Image getDefaultImage() {
         return defaultImage;
     }
 
-    public static void main(String[] args) {
-        ImageManager imageManager = ImageManager.getInstance();
-        Image image = imageManager.getImage("http://books.google.com/books/content?id=x9gtDAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api");
-        System.out.println(image);
-    }
+
 }

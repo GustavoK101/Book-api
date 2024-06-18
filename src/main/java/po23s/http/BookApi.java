@@ -26,7 +26,7 @@ public class BookApi {
         SwingWorker<SearchResult, Void> worker = new SwingWorker<>() {
             @Override
             protected SearchResult doInBackground() {
-                String retornoJSON = clienteHttp.buscaDados("https://www.googleapis.com/books/v1/volumes?maxResults=20&q=" + pesquisa.replace(" ", "+"));
+                String retornoJSON = clienteHttp.buscaDados("https://www.googleapis.com/books/v1/volumes?maxResults=40&q=" + pesquisa.replace(" ", "+"));
                 return gson.fromJson(retornoJSON, SearchResult.class);
             }
 
