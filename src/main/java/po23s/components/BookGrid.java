@@ -92,6 +92,7 @@ public class BookGrid extends JPanel {
     public void clear() {
         this.books.clear();
         panel.removeAll();
+        scrollPane.getVerticalScrollBar().setValue(0);
 
     }
 
