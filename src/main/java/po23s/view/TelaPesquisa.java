@@ -26,7 +26,7 @@ public class TelaPesquisa extends JFrame {
 
     private List<Book> books = new ArrayList<>();
     BookGrid bookGrid;
-    BookDetails dialogDetalhes;
+    BookDetails bookDetailPane;
 
     ImageButton botaoBusca;
 
@@ -45,17 +45,6 @@ public class TelaPesquisa extends JFrame {
         });
 
         api = new BookApi();
-
-        // compute grid size based on screen size, and update when the window resizes
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-                int width = getWidth();
-                int gridWidth = width / 200;
-                bookGrid.setGridWidth(gridWidth);
-            }
-        });
 
     }
 
@@ -84,21 +73,21 @@ public class TelaPesquisa extends JFrame {
     void initComponents() {
         // add padding
 
-        JPanel panel = new JPanel(new MigLayout("fillx, insets 16", "[]".repeat(12)));
-        setContentPane(panel);
+        JPanel mainPanel = new JPanel(new MigLayout("fill, insets 16", "[]".repeat(12)));
+        setContentPane(mainPanel);
         // add logo
         URL logoUrl = TelaPesquisa.class.getResource("/logo.png");
         try {
             JLabel logoTitle = new JLabel("Buscador de Livros");
             logoTitle.setFont(new Font("Arial", Font.BOLD, 24));
             // change logo color
-            panel.add(logoTitle, "span 6, pushx, align left");
+            mainPanel.add(logoTitle, "span 6, pushx, align left");
 
             BufferedImage logoImg = ImageIO.read(logoUrl);
 
             JLabel logo = new JLabel(new ImageIcon(logoImg.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
             // add centered
-            panel.add(logo, "span 12, align right, wrap");
+            mainPanel.add(logo, "span 12, align right, wrap");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,27 +104,39 @@ public class TelaPesquisa extends JFrame {
 
         campoBusca.setMargin(new Insets(4, 4, 4, 4));
         botaoBusca.setMargin(new Insets(4, 4, 4, 16));
-        panel.add(campoBusca, "span 10, pushx, growx");
-        panel.add(botaoBusca, "growx, wrap");
+        mainPanel.add(campoBusca, "span 10, pushx, growx");
+        mainPanel.add(botaoBusca, "growx, wrap");
 
         bookGrid = new BookGrid(4, books);
-        panel.add(bookGrid, "span 12, grow, push, wrap");
+
+        JPanel resultsPanel = new JPanel(new MigLayout("fillx, insets 0", "[grow, fill][300px]"));
+        mainPanel.add(resultsPanel, "span 12, grow, push, wrap");
+
+        resultsPanel.add(bookGrid, "grow 2, push 1");
 
 
+        bookDetailPane = new BookDetails();
+        JScrollPane bookDetailScroll = new JScrollPane(bookDetailPane);
+        bookDetailScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        bookDetailScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        bookDetailScroll.setBorder(BorderFactory.createEmptyBorder());
+        bookDetailScroll.getVerticalScrollBar().setUnitIncrement(16);
+        resultsPanel.add(bookDetailScroll, "grow, push");
+//        bookDetailPane.setMaximumSize(new Dimension(250, 1080));
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        bookDetailScroll.setMinimumSize(new Dimension(300, getHeight()));
 
-        setSize(800, 720);
-
+        setSize(1280, 720);
+        setMinimumSize(new Dimension(800, 600));
+        setResizable(true);
         setLocationRelativeTo(null);
 
         setVisible(true);
 
-        dialogDetalhes = new BookDetails(this, "Detalhes do Livro");
-
         bookGrid.addOnBookClickedListener(book -> {
-            dialogDetalhes.setBook(book);
-            if (!dialogDetalhes.isVisible()) {
-                dialogDetalhes.setVisible(true);
+            bookDetailPane.setBook(book);
+            if (!bookDetailPane.isVisible()) {
+                bookDetailPane.setVisible(true);
             }
         });
 

@@ -5,6 +5,8 @@ import po23s.model.Book;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,12 @@ public class BookGrid extends JPanel {
     private final List<OnBookClickedListener> listeners = new ArrayList<>();
 
     private int gridWidth = 3;
+    private int itemWidth = 185;
 
+
+    public int getItemWidth() {
+        return itemWidth;
+    }
 
     public BookGrid(int gridWidth, List<Book> books) {
         super(new MigLayout("fill"));
@@ -27,8 +34,29 @@ public class BookGrid extends JPanel {
 
         add(scrollPane, "grow, wrap, push");
 
-        panel.setLayout(new MigLayout("fillx,  insets 8, gap 8", "[]".repeat(gridWidth)));
+        String colConstraints = getColConstraints(gridWidth);
+        panel.setLayout(new MigLayout("fillx, insets 8, gapx 8, gapy 16, center", colConstraints, "[]"));
+
         updateGrid();
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+//                // keep gridWidth at minimum 3
+                int width = getWidth();
+                System.out.println("new width: " + width);
+                int newGridWidth = Math.max(3, width / itemWidth);
+                // recompute max item width based on gridWidth
+                System.out.println(newGridWidth);
+                setGridWidth(newGridWidth - 1);
+            }
+        });
+
+    }
+
+    private static String getColConstraints(int gridWidth) {
+        return "push" + "[]".repeat(gridWidth) + "push";
     }
 
     public void addOnBookClickedListener(OnBookClickedListener listener) {
@@ -37,17 +65,16 @@ public class BookGrid extends JPanel {
 
 
     public void updateGrid() {
-        System.out.println("Updating grid");
-        System.out.println("Books size: " + books.size());
+        ((MigLayout) panel.getLayout()).setColumnConstraints(getColConstraints(gridWidth));
         for (int i = 0; i < books.size(); i++) {
-            String constraints = "growx,";
+            String constraints = "";
             if ((i + 1) % gridWidth == 0) {
-                constraints += " wrap";
+                constraints += "wrap";
             }
-            System.out.println("Adding book " + i + " to grid");
             Component component = createBookItem(books.get(i));
             panel.add(component, constraints);
         }
+
         panel.revalidate();
         panel.repaint();
     }
@@ -58,8 +85,7 @@ public class BookGrid extends JPanel {
     }
 
     private Component createBookItem(Book book) {
-        System.out.println("Creating book item" + book.getTitle());
-        BookItemPanel component = new BookItemPanel(book);
+        BookItemPanel component = new BookItemPanel(book, itemWidth);
         component.setOnBookClickedListener(clickedBook -> {
 
             for (OnBookClickedListener listener : listeners) {

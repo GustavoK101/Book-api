@@ -15,9 +15,9 @@ public class BookItemPanel extends JPanel {
 
     private final Book book;
 
-    public BookItemPanel(Book book) {
+    public BookItemPanel(Book book, int width) {
         this.book = book;
-        setLayout(new MigLayout("fill", "[]"));
+        setLayout(new MigLayout("insets 0, fill", "[]"));
         setBackground(Color.WHITE);
 
         // change mouse to pointer
@@ -25,20 +25,31 @@ public class BookItemPanel extends JPanel {
 
 
         // border for 'card' like effect
-        Border border = BorderFactory.createEmptyBorder(0, 0, 4, 2);
+        Border border = BorderFactory.createEmptyBorder(0, 0, 60, 60);
         this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(), border));
 
 
-        setPreferredSize(new Dimension(150, 250));
+        // compute height, keep 9:16 aspect ratio
+        int height = (int) (width / 0.5625);
+
+        setPreferredSize(new Dimension(width, height));
+        setMaximumSize(new Dimension(width, height));
 
         title = new JLabel(book.getTitle());
-        title.setMaximumSize(new Dimension(150, 20));
+        title.setMaximumSize(new Dimension(width, 20));
+        title.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        ImagePanel imagePanel = new ImagePanel(book.getImgUrl());
+        String newUrl = "";
+        if (book.getImgUrl() != null) {
+            newUrl = book.getImgUrl().replace("zoom=1", "zoom=2");
+        }
 
+        ImagePanel imagePanel = new ImagePanel(newUrl, width - 2, height);
 
-        add(imagePanel, "span 2, wrap, pushy, center");
-        add(title, "wrap");
+        // add image top with 1px top margin
+        imagePanel.setBorder(BorderFactory.createEmptyBorder(1, 0, 0, 0));
+        add(imagePanel, "wrap");
+        add(title, "pushy, wrap");
 
         this.addMouseListener(new MouseAdapter() {
             @Override

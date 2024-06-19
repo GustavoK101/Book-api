@@ -15,17 +15,14 @@ public class ImagePanel extends JLabel implements Callback<Image> {
     private int maxWidth = 150;
     private int maxHeight = 200;
 
-    public ImagePanel(String url) {
-        super();
-        this.url = url;
-        setMaximumSize(new Dimension(maxWidth, maxHeight));
-        loadImage();
-    }
 
     public ImagePanel(String url, int maxWidth, int maxHeight) {
         this.url = url;
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
+        setMaximumSize(new Dimension(maxWidth, maxHeight));
+        loadImage();
+
     }
 
     public void loadImage() {
@@ -44,7 +41,6 @@ public class ImagePanel extends JLabel implements Callback<Image> {
             setIcon(new ImageIcon(ImageManager.getInstance().getDefaultImage()));
             return;
         }
-        System.out.println("Image loaded");
         removeAll();
         Image image;
 
