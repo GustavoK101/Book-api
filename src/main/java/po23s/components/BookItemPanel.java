@@ -48,8 +48,14 @@ public class BookItemPanel extends JPanel {
 
         // add image top with 1px top margin
         imagePanel.setBorder(BorderFactory.createEmptyBorder(1, 0, 0, 0));
-        add(imagePanel, "wrap");
+        add(imagePanel, "growy, wrap");
         add(title, "pushy, wrap");
+
+        // if height is too small hide title
+        System.out.println(height);
+        if (height < 250) {
+            title.setVisible(false);
+        }
 
         this.addMouseListener(new MouseAdapter() {
             @Override

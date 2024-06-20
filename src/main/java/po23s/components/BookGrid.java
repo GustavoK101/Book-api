@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,9 @@ public class BookGrid extends JPanel {
     private final List<OnBookClickedListener> listeners = new ArrayList<>();
 
     private int gridWidth = 3;
-    private int itemWidth = 185;
+
+    private int baseItemWidth = 40;
+    private int itemWidth = baseItemWidth;
 
 
     public int getItemWidth() {
@@ -44,14 +47,42 @@ public class BookGrid extends JPanel {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
 //                // keep gridWidth at minimum 3
-                int width = getWidth();
-                System.out.println("new width: " + width);
-                int newGridWidth = Math.max(3, width / itemWidth);
-                // recompute max item width based on gridWidth
-                System.out.println(newGridWidth);
-                setGridWidth(newGridWidth - 1);
+                recalculateItemWith();
+                updateGrid();
+
             }
         });
+
+
+        DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(e -> {
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                int oldWidth = this.gridWidth;
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    this.gridWidth = Math.min(20, this.gridWidth + 1);
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    this.gridWidth = Math.max(1, this.gridWidth - 1);
+                }
+
+                if (oldWidth != this.gridWidth) {
+                    recalculateItemWith();
+                    updateGrid();
+                    System.out.println("Grid width: " + this.gridWidth + " item width: " + itemWidth);
+                    return true;
+                }
+            }
+            return false;
+
+        });
+
+
+    }
+
+    private void recalculateItemWith() {
+        int width = getWidth();
+        if (width == 0) return;
+
+        itemWidth = (width / gridWidth) - 16;
 
     }
 
@@ -65,6 +96,7 @@ public class BookGrid extends JPanel {
 
 
     public void updateGrid() {
+        panel.removeAll();
         ((MigLayout) panel.getLayout()).setColumnConstraints(getColConstraints(gridWidth));
         for (int i = 0; i < books.size(); i++) {
             String constraints = "";
