@@ -3,6 +3,8 @@ package po23s.model;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookDeserializer implements JsonDeserializer<Book> {
 
@@ -23,7 +25,17 @@ public class BookDeserializer implements JsonDeserializer<Book> {
         } else {
             imgUrl = null;
         }
-        return new Book(title, imgUrl);
+
+        List<String> autores = new ArrayList<>();
+
+        if (volumeInfo.has("authors")) {
+            JsonArray authorsArray = volumeInfo.getAsJsonArray("authors");
+            for (int i = 0; i < authorsArray.size(); i++) {
+                String authorName = authorsArray.get(i).getAsString();
+                autores.add(authorName);
+            }
+        }
+        return new Book(title, imgUrl, autores);
     }
 
 }

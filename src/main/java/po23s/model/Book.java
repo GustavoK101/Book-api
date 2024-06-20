@@ -1,21 +1,31 @@
 package po23s.model;
 
 import java.beans.Transient;
+import java.util.List;
 
 public class Book {
     private String title;
     private String imgUrl;
 
     private transient boolean isSelected = false;
-//    private String autores;
-//    private String editora;
+    private List <String> autores;
+    private String editora;
 //    private Boolean dispPdf;
-//    private float valor;
+//    private double valor;
 
 
-    public Book(String title, String imgUrl) {
+    public Book(String title, String imgUrl, List<String> autores) {
         this.title = title;
         this.imgUrl = imgUrl;
+        this.autores = autores;
+    }
+
+    public List<String> getAutores() {
+        return autores;
+    }
+
+    public void setAutores(List<String> autores) {
+        this.autores = autores;
     }
 
     public String getImgUrl() {

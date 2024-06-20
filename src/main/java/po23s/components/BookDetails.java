@@ -6,11 +6,14 @@ import po23s.model.Book;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class BookDetails extends JPanel {
     private Book book;
     ImagePanel imagePanel;
     JLabel title;
+    JLabel author;
 
     public BookDetails() {
         initComponent();
@@ -35,7 +38,8 @@ public class BookDetails extends JPanel {
         title.setMaximumSize(new Dimension(250, 700));
         title.setFont(new Font("Arial", Font.BOLD, 24));
         add(title, "wrap");
-        JLabel author = new JLabel("Autor do livro");
+        author = new JLabel("");
+        author.setMaximumSize(new Dimension(250, 700));
         author.setForeground(new Color(0x666666));
         add(author, "wrap");
     }
@@ -49,9 +53,33 @@ public class BookDetails extends JPanel {
         if (book == null) {
             title.setText("Clique em um livro para ver detalhes");
             imagePanel.setVisible(false);
+            author.setText("");
         } else {
             title.setText("<html><body>" + book.getTitle() + "</body></html>");
             imagePanel.setVisible(true);
+
+            String autoresText = "";
+            int lastIndex = book.getAutores().size()-1;
+            for (int i = 0; i < book.getAutores().size(); i++) {
+                String autor = book.getAutores().get(i);
+                boolean isFirst = i == 0;
+                boolean isLast = i == lastIndex;
+                if (isFirst){
+                    autoresText += autor;
+                    continue;
+                }
+                if(isLast){
+                    autoresText += " e ";
+                }else{
+                    autoresText += ", ";
+                }
+                autoresText += autor;
+            }
+            if (book.getAutores().isEmpty()) {
+                autoresText = "Autor desconhecido";
+            }
+
+            author.setText("<html><body>" + autoresText + "<html><body>");
 
             String newUrl = null;
             if (book.getImgUrl() != null) {
