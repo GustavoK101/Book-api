@@ -1,13 +1,10 @@
 package po23s.components;
 
 import net.miginfocom.swing.MigLayout;
-import po23s.ImageManager;
 import po23s.model.Book;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class BookDetails extends JPanel {
     private Book book;
@@ -58,26 +55,7 @@ public class BookDetails extends JPanel {
             title.setText("<html><body>" + book.getTitle() + "</body></html>");
             imagePanel.setVisible(true);
 
-            String autoresText = "";
-            int lastIndex = book.getAutores().size()-1;
-            for (int i = 0; i < book.getAutores().size(); i++) {
-                String autor = book.getAutores().get(i);
-                boolean isFirst = i == 0;
-                boolean isLast = i == lastIndex;
-                if (isFirst){
-                    autoresText += autor;
-                    continue;
-                }
-                if(isLast){
-                    autoresText += " e ";
-                }else{
-                    autoresText += ", ";
-                }
-                autoresText += autor;
-            }
-            if (book.getAutores().isEmpty()) {
-                autoresText = "Autor desconhecido";
-            }
+            String autoresText = getAuthors();
 
             author.setText("<html><body>" + autoresText + "<html><body>");
 
@@ -88,5 +66,29 @@ public class BookDetails extends JPanel {
             imagePanel.setUrl(newUrl);
         }
 
+    }
+
+    private String getAuthors() {
+        StringBuilder autoresText = new StringBuilder();
+        int lastIndex = book.getAutores().size() - 1;
+        for (int i = 0; i < book.getAutores().size(); i++) {
+            String autor = book.getAutores().get(i);
+            boolean isFirst = i == 0;
+            boolean isLast = i == lastIndex;
+            if (isFirst) {
+                autoresText.append(autor);
+                continue;
+            }
+            if (isLast) {
+                autoresText.append(" e ");
+            } else {
+                autoresText.append(", ");
+            }
+            autoresText.append(autor);
+        }
+        if (book.getAutores().isEmpty()) {
+            autoresText = new StringBuilder("Autor desconhecido");
+        }
+        return autoresText.toString();
     }
 }
