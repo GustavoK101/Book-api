@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("DataFlowIssue")
-public class TelaPesquisa extends JFrame {
+public class MainScreen extends JFrame {
     JTextField campoBusca;
     BookApi api;
 
@@ -30,10 +30,10 @@ public class TelaPesquisa extends JFrame {
 
     Integer maxResults = 20;
 
-    Integer gridSize = 6;
+    Integer gridSize = 5;
 
 
-    public TelaPesquisa() {
+    public MainScreen() {
         setTitle("Pesquisa de Livros");
         initComponents();
         // set campo busca hint
@@ -75,7 +75,7 @@ public class TelaPesquisa extends JFrame {
         JPanel mainPanel = new JPanel(new MigLayout("fill, insets 16", "[]".repeat(12)));
         setContentPane(mainPanel);
         // add logo
-        URL logoUrl = TelaPesquisa.class.getResource("/logo.png");
+        URL logoUrl = MainScreen.class.getResource("/logo.png");
         try {
             JLabel logoTitle = new JLabel("Buscador de Livros");
             logoTitle.setFont(new Font("Arial", Font.BOLD, 24));
@@ -112,7 +112,7 @@ public class TelaPesquisa extends JFrame {
 
         JPanel actionPanel = new JPanel(new MigLayout("insets 0", "[]", "[]"));
         mainPanel.add(actionPanel, "span 12, growx, pushx, wrap");
-        // combobox with 10, 20, 30, 40 max results
+
         JComboBox<Integer> maxResultsComboBox = new JComboBox<>(new Integer[]{10, 20, 30, 40});
         maxResultsComboBox.setSelectedItem(maxResults);
         maxResultsComboBox.addActionListener(e -> {
@@ -126,7 +126,7 @@ public class TelaPesquisa extends JFrame {
         JComboBox<Integer> gridSizeComboBox = new JComboBox<>(new Integer[]{3, 4, 5, 6, 7, 8, 9});
 
         gridSizeComboBox.setSelectedItem(this.gridSize);
-        // pack width to match items
+
         gridSizeComboBox.setMaximumSize(new Dimension(50, 30));
 
 
@@ -138,8 +138,6 @@ public class TelaPesquisa extends JFrame {
         JButton btnPlus = new JButton("+");
         btnPlus.addActionListener(e -> {
             gridSizeComboBox.setSelectedItem(gridSize + 1);
-//            gridSize = (Integer) gridSizeComboBox.getSelectedItem();
-//            bookGrid.setGridWidth(gridSize);
         });
 
         JButton btnMinus = new JButton("-");
@@ -164,7 +162,6 @@ public class TelaPesquisa extends JFrame {
         bookDetailScroll.setBorder(BorderFactory.createEmptyBorder());
         bookDetailScroll.getVerticalScrollBar().setUnitIncrement(16);
         resultsPanel.add(bookDetailScroll, "grow, push");
-//        bookDetailPane.setMaximumSize(new Dimension(250, 1080));
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         bookDetailScroll.setMinimumSize(new Dimension(300, getHeight()));
 
@@ -187,6 +184,6 @@ public class TelaPesquisa extends JFrame {
 
     public static void main(String[] args) {
         FlatLightLaf.setup();
-        SwingUtilities.invokeLater(TelaPesquisa::new);
+        SwingUtilities.invokeLater(MainScreen::new);
     }
 }
