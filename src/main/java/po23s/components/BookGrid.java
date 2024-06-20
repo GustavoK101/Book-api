@@ -54,26 +54,26 @@ public class BookGrid extends JPanel {
         });
 
 
-        DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(e -> {
-            if (e.getID() == KeyEvent.KEY_PRESSED) {
-                int oldWidth = this.gridWidth;
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    this.gridWidth = Math.min(20, this.gridWidth + 1);
-                }
-                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    this.gridWidth = Math.max(1, this.gridWidth - 1);
-                }
-
-                if (oldWidth != this.gridWidth) {
-                    recalculateItemWith();
-                    updateGrid();
-                    System.out.println("Grid width: " + this.gridWidth + " item width: " + itemWidth);
-                    return true;
-                }
-            }
-            return false;
-
-        });
+//        DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(e -> {
+//            if (e.getID() == KeyEvent.KEY_PRESSED) {
+//                int oldWidth = this.gridWidth;
+//                if (e.getKeyCode() == KeyEvent.VK_UP) {
+//                    this.gridWidth = Math.min(20, this.gridWidth + 1);
+//                }
+//                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+//                    this.gridWidth = Math.max(1, this.gridWidth - 1);
+//                }
+//
+//                if (oldWidth != this.gridWidth) {
+//                    recalculateItemWith();
+//                    updateGrid();
+//                    System.out.println("Grid width: " + this.gridWidth + " item width: " + itemWidth);
+//                    return true;
+//                }
+//            }
+//            return false;
+//
+//        });
 
 
     }
@@ -162,6 +162,7 @@ public class BookGrid extends JPanel {
 
     public void setGridWidth(int gridWidth) {
         this.gridWidth = gridWidth;
+        recalculateItemWith();
         panel.removeAll();
         updateGrid();
     }

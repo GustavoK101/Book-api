@@ -7,6 +7,7 @@ import po23s.model.BookDeserializer;
 import po23s.model.SearchResult;
 
 import javax.swing.*;
+import java.net.URLEncoder;
 
 public class BookApi {
 
@@ -22,11 +23,18 @@ public class BookApi {
 
 
     // receives a query, a success callback that receives the result, and an error callback that receives the exception
-    public SwingWorker<SearchResult, Void> pesquisar(String pesquisa, Callback<SearchResult> callback) {
+    public SwingWorker<SearchResult, Void> pesquisar(String pesquisa, int maxResults, Callback<SearchResult> callback) {
         SwingWorker<SearchResult, Void> worker = new SwingWorker<>() {
             @Override
             protected SearchResult doInBackground() {
-                String retornoJSON = clienteHttp.buscaDados("https://www.googleapis.com/books/v1/volumes?maxResults=40&q=" + pesquisa.replace(" ", "+"));
+                // urlencode  pesquisa param
+
+                String search = "q=" + URLEncoder.encode(pesquisa, java.nio.charset.StandardCharsets.UTF_8);
+
+
+                String url = "https://www.googleapis.com/books/v1/volumes?" + search + "&maxResults=" + maxResults;
+                System.out.println("URL: " + url);
+                String retornoJSON = clienteHttp.buscaDados(url);
                 return gson.fromJson(retornoJSON, SearchResult.class);
             }
 

@@ -11,8 +11,6 @@ import po23s.model.Book;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -30,12 +28,13 @@ public class TelaPesquisa extends JFrame {
 
     ImageButton botaoBusca;
 
+    Integer maxResults = 20;
+
+    Integer gridSize = 6;
+
 
     public TelaPesquisa() {
         setTitle("Pesquisa de Livros");
-//        for (int i = 0; i < 50; i++) {
-//            books.add(new Book("Java " + i, "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"));
-//        }
         initComponents();
         // set campo busca hint
         campoBusca.requestFocus();
@@ -57,7 +56,7 @@ public class TelaPesquisa extends JFrame {
         }
         this.campoBusca.setEnabled(false);
         this.botaoBusca.setLoading(true);
-        api.pesquisar(termo, (result, exception) -> {
+        api.pesquisar(termo, this.maxResults, (result, exception) -> {
             this.campoBusca.setEnabled(true);
             this.botaoBusca.setLoading(false);
             if (exception != null) {
@@ -107,11 +106,54 @@ public class TelaPesquisa extends JFrame {
         mainPanel.add(campoBusca, "span 10, pushx, growx");
         mainPanel.add(botaoBusca, "growx, wrap");
 
-        bookGrid = new BookGrid(4, books);
+        bookGrid = new BookGrid(this.gridSize, books);
 
         JPanel resultsPanel = new JPanel(new MigLayout("fillx, insets 0", "[grow, fill][300px]"));
-        mainPanel.add(resultsPanel, "span 12, grow, push, wrap");
 
+        JPanel actionPanel = new JPanel(new MigLayout("insets 0", "[]", "[]"));
+        mainPanel.add(actionPanel, "span 12, growx, pushx, wrap");
+        // combobox with 10, 20, 30, 40 max results
+        JComboBox<Integer> maxResultsComboBox = new JComboBox<>(new Integer[]{10, 20, 30, 40});
+        maxResultsComboBox.setSelectedItem(maxResults);
+        maxResultsComboBox.addActionListener(e -> {
+            this.maxResults = (Integer) maxResultsComboBox.getSelectedItem();
+            realizarBusca();
+        });
+
+        actionPanel.add(new JLabel("Resultados:"));
+        actionPanel.add(maxResultsComboBox, "");
+
+        JComboBox<Integer> gridSizeComboBox = new JComboBox<>(new Integer[]{3, 4, 5, 6, 7, 8, 9});
+
+        gridSizeComboBox.setSelectedItem(this.gridSize);
+        // pack width to match items
+        gridSizeComboBox.setMaximumSize(new Dimension(50, 30));
+
+
+        gridSizeComboBox.addActionListener(e -> {
+            this.gridSize = (Integer) gridSizeComboBox.getSelectedItem();
+            bookGrid.setGridWidth(gridSize);
+        });
+
+        JButton btnPlus = new JButton("+");
+        btnPlus.addActionListener(e -> {
+            gridSizeComboBox.setSelectedItem(gridSize + 1);
+//            gridSize = (Integer) gridSizeComboBox.getSelectedItem();
+//            bookGrid.setGridWidth(gridSize);
+        });
+
+        JButton btnMinus = new JButton("-");
+        btnMinus.addActionListener(e -> {
+            gridSizeComboBox.setSelectedItem(gridSize - 1);
+        });
+
+
+        actionPanel.add(new JLabel("Tamanho do grid:"));
+        actionPanel.add(btnMinus, "");
+        actionPanel.add(gridSizeComboBox, "");
+        actionPanel.add(btnPlus, "");
+
+        mainPanel.add(resultsPanel, "span 12, grow, push, wrap");
         resultsPanel.add(bookGrid, "grow 2, push 1");
 
 
@@ -139,7 +181,6 @@ public class TelaPesquisa extends JFrame {
                 bookDetailPane.setVisible(true);
             }
         });
-
 
 
     }
