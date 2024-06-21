@@ -161,12 +161,8 @@ public class BookDetails extends JPanel {
             } else {
                 pageCount.setText("");
             }
-
             pdfIcon.setVisible(book.isPdfAvailable());
-
             openLink.setVisible(book.getWebReaderLink() != null);
-
-
         }
 
     }
