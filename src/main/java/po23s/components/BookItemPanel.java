@@ -40,8 +40,8 @@ public class BookItemPanel extends JPanel {
         title.setFont(new Font("Arial", Font.PLAIN, 14));
 
         String newUrl = "";
-        if (book.getImgUrl() != null) {
-            newUrl = book.getImgUrl().replace("zoom=1", "zoom=2");
+        if (book.getCoverUrl() != null) {
+            newUrl = book.getCoverUrl().replace("zoom=1", "zoom=2");
         }
 
         ImagePanel imagePanel = new ImagePanel(newUrl, width - 2, height);

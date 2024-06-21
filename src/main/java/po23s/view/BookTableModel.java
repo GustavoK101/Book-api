@@ -32,7 +32,7 @@ public class BookTableModel extends AbstractTableModel {
         if(column == 0 ){
             return listaLivros.get(row).getTitle();
         }else{
-            return listaLivros.get(row).getImgUrl();
+            return listaLivros.get(row).getCoverUrl();
         }
         
     }

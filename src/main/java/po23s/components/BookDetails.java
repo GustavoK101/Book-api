@@ -11,6 +11,7 @@ public class BookDetails extends JPanel {
     ImagePanel imagePanel;
     JLabel title;
     JLabel author;
+    JLabel year;
 
     public BookDetails() {
         initComponent();
@@ -28,17 +29,26 @@ public class BookDetails extends JPanel {
 
 
         // add image
-        imagePanel = new ImagePanel("", 250, 700);
+        imagePanel = new ImagePanel("", 200, 700);
         imagePanel.setVisible(true);
         add(imagePanel, "wrap");
         title = new JLabel("<html><body>Clique em um livro para ver detalhes</body></html>");
         title.setMaximumSize(new Dimension(250, 700));
         title.setFont(new Font("Arial", Font.BOLD, 24));
         add(title, "wrap");
+
+
+        year = new JLabel("");
+        year.setFont(new Font("Arial", Font.PLAIN, 12));
+        year.setMaximumSize(new Dimension(250, 700));
+        year.setForeground(new Color(0x666666));
+        add(year, "wrap");
+
         author = new JLabel("");
         author.setMaximumSize(new Dimension(250, 700));
         author.setForeground(new Color(0x666666));
         add(author, "wrap");
+
     }
 
     public void setBook(Book book) {
@@ -60,19 +70,25 @@ public class BookDetails extends JPanel {
             author.setText("<html><body>" + autoresText + "<html><body>");
 
             String newUrl = null;
-            if (book.getImgUrl() != null) {
-                newUrl = book.getImgUrl().replace("zoom=1", "zoom=6");
+            if (book.getCoverUrl() != null) {
+                newUrl = book.getCoverUrl().replace("zoom=1", "zoom=6");
             }
             imagePanel.setUrl(newUrl);
+
+            if (book.getYear() != null) {
+                year.setText(book.getYear().toString());
+            } else {
+                year.setText("");
+            }
         }
 
     }
 
     private String getAuthors() {
         StringBuilder autoresText = new StringBuilder();
-        int lastIndex = book.getAutores().size() - 1;
-        for (int i = 0; i < book.getAutores().size(); i++) {
-            String autor = book.getAutores().get(i);
+        int lastIndex = book.getAuthors().size() - 1;
+        for (int i = 0; i < book.getAuthors().size(); i++) {
+            String autor = book.getAuthors().get(i);
             boolean isFirst = i == 0;
             boolean isLast = i == lastIndex;
             if (isFirst) {
@@ -86,7 +102,7 @@ public class BookDetails extends JPanel {
             }
             autoresText.append(autor);
         }
-        if (book.getAutores().isEmpty()) {
+        if (book.getAuthors().isEmpty()) {
             autoresText = new StringBuilder("Autor desconhecido");
         }
         return autoresText.toString();

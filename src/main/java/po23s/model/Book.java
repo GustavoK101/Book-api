@@ -1,39 +1,49 @@
 package po23s.model;
 
-import java.beans.Transient;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Book {
     private String title;
-    private String imgUrl;
+    private String coverUrl;
 
     private transient boolean isSelected = false;
-    private List <String> autores;
-    private String editora;
+    private List<String> authors;
+    private String publisher;
+
+    private Integer year;
+
+    private Integer pageCount;
+
+    private List<String> categories;
+
+    private String language;
+
+
 //    private Boolean dispPdf;
 //    private double valor;
 
 
-    public Book(String title, String imgUrl, List<String> autores) {
+    public Book(String title, String coverUrl, List<String> authors) {
         this.title = title;
-        this.imgUrl = imgUrl;
-        this.autores = autores;
+        this.coverUrl = coverUrl;
+        this.authors = authors;
     }
 
-    public List<String> getAutores() {
-        return autores;
+    public List<String> getAuthors() {
+        return authors;
     }
 
-    public void setAutores(List<String> autores) {
-        this.autores = autores;
+    public void setAuthors(List<String> autores) {
+        this.authors = autores;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getCoverUrl() {
+        return coverUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
     }
 
     public String getTitle() {
@@ -50,5 +60,46 @@ public class Book {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
+    public Integer getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(Integer pageCount) {
+        this.pageCount = pageCount;
+    }
+
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 }
