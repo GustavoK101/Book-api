@@ -94,12 +94,11 @@ public class MainScreen extends JFrame {
 
 
         campoBusca = new JTextField();
+        campoBusca.setText("casa do código");
 
 
         botaoBusca = new ImageButton("Buscar", "icon-search");
-        botaoBusca.addActionListener(e -> {
-            realizarBusca();
-        });
+        botaoBusca.addActionListener(e -> realizarBusca());
 
         campoBusca.setMargin(new Insets(4, 4, 4, 4));
         botaoBusca.setMargin(new Insets(4, 4, 4, 16));
@@ -120,7 +119,7 @@ public class MainScreen extends JFrame {
             realizarBusca();
         });
 
-        actionPanel.add(new JLabel("Resultados:"));
+        actionPanel.add(new JLabel("Resultados"));
         actionPanel.add(maxResultsComboBox, "");
 
         JComboBox<Integer> gridSizeComboBox = new JComboBox<>(new Integer[]{3, 4, 5, 6, 7, 8, 9});
@@ -146,7 +145,7 @@ public class MainScreen extends JFrame {
         });
 
 
-        actionPanel.add(new JLabel("Tamanho do grid:"));
+        actionPanel.add(new JLabel("Densidade"));
         actionPanel.add(btnMinus, "");
         actionPanel.add(gridSizeComboBox, "");
         actionPanel.add(btnPlus, "");
@@ -183,6 +182,8 @@ public class MainScreen extends JFrame {
     }
 
     public static void main(String[] args) {
+//        System.setProperty("sun.java2d.uiScale", "2");
+
         FlatLightLaf.setup();
         SwingUtilities.invokeLater(MainScreen::new);
     }

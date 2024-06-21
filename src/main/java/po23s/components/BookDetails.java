@@ -5,6 +5,8 @@ import po23s.model.Book;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URI;
+import java.util.Objects;
 
 public class BookDetails extends JPanel {
     private Book book;
@@ -12,6 +14,16 @@ public class BookDetails extends JPanel {
     JLabel title;
     JLabel author;
     JLabel year;
+    JLabel publisher;
+
+    JLabel price;
+
+    JLabel pageCount;
+
+    JLabel pdfIcon;
+
+    JButton openLink;
+
 
     public BookDetails() {
         initComponent();
@@ -19,19 +31,39 @@ public class BookDetails extends JPanel {
 
 
     private void initComponent() {
-        setLayout(new MigLayout("", "push[]push"));
+        setLayout(new MigLayout("", "[grow]"));
         setBackground(Color.WHITE);
         // set 8px padding
         setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
-//        add(new ImageButton("PDF", "icon-pdf"), "wrap");
-//        add(new ImageButton("PDF", "icon-epub"), "wrap");
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new MigLayout("", "[]push[][]"));
+        headerPanel.setBackground(Color.WHITE);
+        add(headerPanel, "wrap,growx");
+
+
+        price = new JLabel("");
+        price.setMaximumSize(new Dimension(250, 700));
+        price.setForeground(new Color(0x666666));
+        headerPanel.add(price, "");
+
+        pageCount = new JLabel("");
+        pageCount.setMaximumSize(new Dimension(250, 700));
+        pageCount.setForeground(new Color(0x666666));
+        headerPanel.add(pageCount, "");
+
+        pdfIcon = new JLabel();
+        ImageIcon pdfIconImage = new ImageIcon(Objects.requireNonNull(ImagePanel.class.getResource("/icon-pdf-color.png")));
+        pdfIconImage = new ImageIcon(pdfIconImage.getImage().getScaledInstance(18, 24, Image.SCALE_SMOOTH));
+        this.pdfIcon.setIcon(pdfIconImage);
+        this.pdfIcon.setVisible(false);
+        headerPanel.add(this.pdfIcon, "wrap");
 
 
         // add image
         imagePanel = new ImagePanel("", 200, 700);
-        imagePanel.setVisible(true);
-        add(imagePanel, "wrap");
+        imagePanel.setVisible(false);
+        add(imagePanel, "wrap, growx, align center");
         title = new JLabel("<html><body>Clique em um livro para ver detalhes</body></html>");
         title.setMaximumSize(new Dimension(250, 700));
         title.setFont(new Font("Arial", Font.BOLD, 24));
@@ -48,6 +80,36 @@ public class BookDetails extends JPanel {
         author.setMaximumSize(new Dimension(250, 700));
         author.setForeground(new Color(0x666666));
         add(author, "wrap");
+
+        // add divider
+        JSeparator separator = new JSeparator();
+        separator.setForeground(new Color(0xEEEEEE));
+        add(separator, "span, growx, wrap");
+
+        publisher = new JLabel("");
+        publisher.setMaximumSize(new Dimension(250, 700));
+        publisher.setForeground(new Color(0x666666));
+        add(publisher, "wrap");
+
+        openLink = new JButton("Abrir no Google Books");
+        openLink.addActionListener(e -> {
+            if (book != null) {
+                try {
+                    Desktop.getDesktop().browse(new URI(book.getWebReaderLink()));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        // add divider
+        JSeparator separator2 = new JSeparator();
+        separator2.setForeground(new Color(0xEEEEEE));
+        add(separator2, "span, growx, wrap");
+
+        add(openLink, "wrap");
+        openLink.setVisible(false);
+
 
     }
 
@@ -80,6 +142,30 @@ public class BookDetails extends JPanel {
             } else {
                 year.setText("");
             }
+
+            if (book.getPublisher() != null) {
+                publisher.setText(book.getPublisher());
+            } else {
+                publisher.setText("");
+            }
+
+            if (book.getPrice() != null) {
+                price.setText(book.getPrice());
+            } else {
+                price.setText("");
+            }
+
+            if (book.getPageCount() != null) {
+                pageCount.setText(book.getPageCount().toString() + " páginas");
+            } else {
+                pageCount.setText("");
+            }
+
+            pdfIcon.setVisible(book.isPdfAvailable());
+
+            openLink.setVisible(book.getWebReaderLink() != null);
+
+
         }
 
     }

@@ -18,10 +18,9 @@ public class Book {
     private List<String> categories;
 
     private String language;
-
-
-//    private Boolean dispPdf;
-//    private double valor;
+    private String price;
+    private boolean pdfAvailable;
+    private String webReaderLink;
 
 
     public Book(String title, String coverUrl, List<String> authors) {
@@ -101,5 +100,29 @@ public class Book {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public boolean isPdfAvailable() {
+        return pdfAvailable;
+    }
+
+    public void setPdfAvailable(boolean pdfAvailable) {
+        this.pdfAvailable = pdfAvailable;
+    }
+
+    public void setWebReaderLink(String webReaderLink) {
+        this.webReaderLink = webReaderLink;
+    }
+
+    public String getWebReaderLink() {
+        return webReaderLink;
     }
 }
