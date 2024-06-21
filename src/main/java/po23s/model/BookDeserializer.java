@@ -50,7 +50,6 @@ public class BookDeserializer implements JsonDeserializer<Book> {
         if (volumeInfo.has("publishedDate")) {
             publishedDateStr = volumeInfo.get("publishedDate").getAsString();
             try {
-                System.out.println(publishedDateStr);
                 publishedYear = LocalDate.parse(publishedDateStr).getYear();
             } catch (DateTimeParseException e) {
                 System.out.println("Error parsing date: " + publishedDateStr);

@@ -33,7 +33,6 @@ public class BookApi {
 
 
                 String url = "https://www.googleapis.com/books/v1/volumes?" + search + "&maxResults=" + maxResults;
-                System.out.println("URL: " + url);
                 String retornoJSON = clienteHttp.buscaDados(url);
                 return gson.fromJson(retornoJSON, SearchResult.class);
             }

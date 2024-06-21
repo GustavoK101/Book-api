@@ -64,7 +64,11 @@ public class MainScreen extends JFrame {
                 return;
             }
             bookGrid.clear();
-            bookGrid.addBooks(result.getItems());
+            if (result.getItems() != null) {
+                bookGrid.addBooks(result.getItems());
+            } else {
+                bookGrid.addBooks(new ArrayList<>());
+            }
         });
     }
 
