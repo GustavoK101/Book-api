@@ -9,24 +9,22 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class BookItemPanel extends JPanel {
+public class BookCard extends JPanel {
     JLabel title;
     private OnBookClickedListener listener = null;
 
     private final Book book;
 
-    public BookItemPanel(Book book, int width) {
+    private boolean showTitle;
+
+    public BookCard(Book book, int width, boolean showTitle) {
         this.book = book;
+        this.showTitle = showTitle;
         setLayout(new MigLayout("insets 0, fill", "[]"));
         setBackground(Color.WHITE);
 
         // change mouse to pointer
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-
-        // border for 'card' like effect
-        Border border = BorderFactory.createEmptyBorder(0, 0, 60, 60);
-        this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(), border));
 
 
         // compute height, keep 9:16 aspect ratio
@@ -38,6 +36,9 @@ public class BookItemPanel extends JPanel {
         title = new JLabel(book.getTitle());
         title.setMaximumSize(new Dimension(width, 20));
         title.setFont(new Font("Arial", Font.PLAIN, 14));
+        // add padding
+        title.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+
 
         String newUrl = "";
         if (book.getCoverUrl() != null) {
@@ -47,12 +48,21 @@ public class BookItemPanel extends JPanel {
         ImagePanel imagePanel = new ImagePanel(newUrl, width - 2, height);
 
         // add image top with 1px top margin
-        imagePanel.setBorder(BorderFactory.createEmptyBorder(1, 0, 0, 0));
-        add(imagePanel, "growy, wrap");
-        add(title, "pushy, wrap");
+        imagePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        add(imagePanel, "grow, pushy, top, wrap");
+
+        // push title to bottom
+        add(title, "wrap, growx, pushy, bottom");
+
+        if (!showTitle) {
+            title.setVisible(false);
+            remove(title);
+            title.setMaximumSize(new Dimension(0, 0));
+        }
+
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         // if height is too small hide title
-        System.out.println(height);
         if (height < 250) {
             title.setVisible(false);
         }
@@ -69,9 +79,14 @@ public class BookItemPanel extends JPanel {
         this.listener = listener;
     }
 
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        if (!showTitle) {
+            return;
+        }
 
         int shade = 0;
         int topOpacity = 100;

@@ -19,7 +19,7 @@ public class ImageManager {
     private Image defaultImage;
 
     private static final ImageManager instance = new ImageManager();
-    private final ExecutorService executor = Executors.newFixedThreadPool(4);
+    private final ExecutorService executor = Executors.newFixedThreadPool(8);
 
 
     private ImageManager() {

@@ -20,7 +20,6 @@ public class ClienteHttp {
     }
 
     public byte[] getRaw(String url) {
-        System.out.println("Fetching image from " + url);
         try {
             URI endereco = URI.create(url);
             HttpClient client = HttpClient.newHttpClient();

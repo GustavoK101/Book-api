@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,28 +53,6 @@ public class BookGrid extends JPanel {
         });
 
 
-//        DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(e -> {
-//            if (e.getID() == KeyEvent.KEY_PRESSED) {
-//                int oldWidth = this.gridWidth;
-//                if (e.getKeyCode() == KeyEvent.VK_UP) {
-//                    this.gridWidth = Math.min(20, this.gridWidth + 1);
-//                }
-//                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-//                    this.gridWidth = Math.max(1, this.gridWidth - 1);
-//                }
-//
-//                if (oldWidth != this.gridWidth) {
-//                    recalculateItemWith();
-//                    updateGrid();
-//                    System.out.println("Grid width: " + this.gridWidth + " item width: " + itemWidth);
-//                    return true;
-//                }
-//            }
-//            return false;
-//
-//        });
-
-
     }
 
     private void recalculateItemWith() {
@@ -111,13 +88,9 @@ public class BookGrid extends JPanel {
         panel.repaint();
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-    }
 
     private Component createBookItem(Book book) {
-        BookItemPanel component = new BookItemPanel(book, itemWidth);
+        BookCard component = new BookCard(book, itemWidth, gridWidth < 6);
         component.setOnBookClickedListener(clickedBook -> {
 
             for (OnBookClickedListener listener : listeners) {
@@ -125,19 +98,19 @@ public class BookGrid extends JPanel {
             }
 
             for (Component c : panel.getComponents()) {
-                BookItemPanel bookItemPanel = (BookItemPanel) c;
+                BookCard bookCard = (BookCard) c;
 
 
                 // if current book is selected but not the clicked book, deselect it
-                Book currBook = bookItemPanel.getBook();
-                if (currBook.isSelected() && bookItemPanel.getBook() != clickedBook) {
-                    bookItemPanel.getBook().setSelected(false);
-                    bookItemPanel.refresh();
+                Book currBook = bookCard.getBook();
+                if (currBook.isSelected() && bookCard.getBook() != clickedBook) {
+                    bookCard.getBook().setSelected(false);
+                    bookCard.refresh();
                 }
                 // if current book is clicked book, toggle selection
-                else if (bookItemPanel.getBook() == clickedBook) {
-                    bookItemPanel.getBook().setSelected(true);
-                    bookItemPanel.refresh();
+                else if (bookCard.getBook() == clickedBook) {
+                    bookCard.getBook().setSelected(true);
+                    bookCard.refresh();
                 }
             }
 

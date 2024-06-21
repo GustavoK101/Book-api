@@ -1,6 +1,8 @@
-package po23s.components;
+package po23s.view;
 
 import net.miginfocom.swing.MigLayout;
+import po23s.components.ImageButton;
+import po23s.components.ImagePanel;
 import po23s.model.Book;
 
 import javax.swing.*;
@@ -15,7 +17,6 @@ public class BookDetails extends JPanel {
     JLabel author;
     JLabel year;
     JLabel publisher;
-
     JLabel price;
 
     JLabel pageCount;
@@ -91,7 +92,7 @@ public class BookDetails extends JPanel {
         publisher.setForeground(new Color(0x666666));
         add(publisher, "wrap");
 
-        openLink = new JButton("Abrir no Google Books");
+        openLink = new ImageButton("Abrir no Google Books", "open-in-new");
         openLink.addActionListener(e -> {
             if (book != null) {
                 try {
@@ -107,7 +108,7 @@ public class BookDetails extends JPanel {
         separator2.setForeground(new Color(0xEEEEEE));
         add(separator2, "span, growx, wrap");
 
-        add(openLink, "wrap");
+        add(openLink, "growx, wrap");
         openLink.setVisible(false);
 
 

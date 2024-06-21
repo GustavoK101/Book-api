@@ -2,7 +2,6 @@ package po23s.view;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import net.miginfocom.swing.MigLayout;
-import po23s.components.BookDetails;
 import po23s.components.BookGrid;
 import po23s.components.ImageButton;
 import po23s.http.BookApi;
